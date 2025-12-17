@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import type { RecommendRequest, RecommendResponse } from "@/lib/types/api";
+import type { RecommendRequest, RecommendResponse } from "@/types/api";
 
 export async function POST(request: NextRequest) {
   try {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import type { RecommendResponse, RecommendItem } from "@/lib/types/api";
+import type { RecommendResponse, RecommendItem } from "@/types/api";
 
 export default function Home() {
   const [message, setMessage] = useState("");
