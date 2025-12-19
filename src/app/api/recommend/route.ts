@@ -20,8 +20,10 @@ export async function POST(request: NextRequest) {
     let response: RecommendResponse;
 
     try {
+      // Execute the multi-agent system with the user message
       const result = await executeMultiAgentSystem(message);
 
+      // Format the response
       response = formatResponse(result);
     } catch (error) {
       console.error("Error executing multi-agent system:", error);

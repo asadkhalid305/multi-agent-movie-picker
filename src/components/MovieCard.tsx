@@ -27,11 +27,6 @@ export default function MovieCard({ item, index }: MovieCardProps) {
             <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 bg-white dark:bg-[#1A1A1A] whitespace-nowrap">
               {isMovie ? "🎬 Movie" : "📺 Show"}
             </span>
-            {item.score && (
-              <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400 border border-green-300 dark:border-green-800">
-                {item.score}/100 match
-              </span>
-            )}
           </div>
         </div>
       </div>
@@ -76,9 +71,6 @@ export default function MovieCard({ item, index }: MovieCardProps) {
         <div className="flex items-center justify-between pt-2 border-t border-gray-200 dark:border-[#3A3A3A]">
           <div className="text-xs text-gray-500 dark:text-gray-400">
             Recommendation #{index + 1}
-          </div>
-          <div className="text-xs font-medium text-gray-600 dark:text-gray-400">
-            ✓ Ready to watch
           </div>
         </div>
       </div>

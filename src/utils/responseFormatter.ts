@@ -37,9 +37,8 @@ export const formatResponse = (result: any): RecommendResponse => {
             type: item.type,
             durationMinutes: item.durationMinutes,
             episodeDurationMinutes: item.episodeDurationMinutes,
-            why: item.explanation || item.timeFit || "Recommended for you",
+            why: item.explanation || "Recommended for you",
             rank: item.rank,
-            score: item.score,
           }));
 
           // For ranker agent, use a friendly message instead of raw JSON

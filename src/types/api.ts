@@ -11,7 +11,6 @@ export interface RecommendItem {
   episodeDurationMinutes?: number; // for shows
   why: string;
   rank?: number; // Optional: rank from ranker agent
-  score?: number; // Optional: score from ranker agent (0-100)
 }
 
 export interface ResponseMetadata {
