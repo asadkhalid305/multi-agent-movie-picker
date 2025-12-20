@@ -1,4 +1,3 @@
-````markdown
 # Multi-Agent Movie Picker
 
 _End decision fatigue. Get personalized movie and show recommendations in seconds._
@@ -176,26 +175,35 @@ This project is designed to teach multi-agent system architecture. The repositor
 
 ### Branch Strategy
 
-- **`main`** - Base template with starter code
-- **`live`** - Working branch for development (use this to build the system)
-- **`solution`** - Complete implementation with all agents and features working
+- **`main`** - Basic project setup with a single empty endpoint (starting point)
+- **`template`** - Workshop starting point with structure and TODOs for implementation
+- **`solution`** - Complete implementation built on top of `template` with all features working
 
 **To build the system yourself:**
 
-1. Checkout the `live` branch:
+1. **Recommended approach:** Create your own branch from `template` to work independently:
 
    ```bash
-   git checkout live
+   git checkout template
+   git checkout -b my-workshop
    ```
 
-2. Follow the step-by-step guide in [`docs/WORKSHOP.md`](docs/WORKSHOP.md), which walks you through:
+   This keeps the `template` branch clean, allowing you to reference it later or start fresh for different implementations.
+
+2. **Alternative:** Work directly on the `template` branch:
+
+   ```bash
+   git checkout template
+   ```
+
+3. Follow the step-by-step guide in [`docs/WORKSHOP.md`](docs/WORKSHOP.md), which walks you through:
 
    - Understanding agent architecture
    - Implementing each specialized agent
    - Integrating tools and guardrails
    - Testing and debugging
 
-3. Reference the `solution` branch anytime to see the complete implementation:
+4. Reference the `solution` branch anytime to see the complete implementation:
    ```bash
    git checkout solution
    npm run dev
@@ -239,4 +247,3 @@ The same principles apply to any domain requiring intelligent decision-making: c
 ## License
 
 MIT
-````
