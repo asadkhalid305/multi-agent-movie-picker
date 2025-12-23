@@ -81,7 +81,7 @@ cd multi-agent-movie-picker
 # Install dependencies
 npm install
 
-# Set up environment variables
+# Option 1: Use environment variable (recommended for local development)
 cp .env.local.example .env.local
 # Edit .env.local and add your OpenAI API key and preferred model:
 # OPENAI_API_KEY="sk-proj-your-actual-api-key-here"
@@ -92,6 +92,47 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+**Option 2: Provide API key at runtime**
+
+If you don't set the `OPENAI_API_KEY` environment variable, the application will automatically prompt you for your OpenAI API key when you first launch it. The key is securely stored in your browser's session storage and is only sent to OpenAI's API.
+
+This runtime option is perfect for:
+
+- **Public deployments** - Share the app URL and let users provide their own keys
+- **Testing different keys** - Easily switch between API keys without redeploying
+- **Security** - Keys are never stored on the server, only in the user's browser session
+- **Cost control** - Each user pays for their own API usage
+
+### Deployment to Vercel
+
+This app is designed for seamless deployment on Vercel (or similar platforms that support Next.js).
+
+**Quick Deploy:**
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/yourusername/multi-agent-movie-picker)
+
+**Manual Deployment:**
+
+1. Push your code to GitHub
+2. Import the project in [Vercel Dashboard](https://vercel.com/new)
+3. Configure environment variables (optional):
+   - `OPENAI_API_KEY` - Your OpenAI API key
+   - `OPENAI_DEFAULT_MODEL` - Model to use (default: gpt-4.1-mini)
+4. Deploy!
+
+**Two Deployment Strategies:**
+
+| Strategy       | Setup                                   | Use Case                                   | Cost                               |
+| -------------- | --------------------------------------- | ------------------------------------------ | ---------------------------------- |
+| **Shared Key** | Set `OPENAI_API_KEY` in Vercel env vars | Demo, internal tool, you control costs     | You pay for all API calls          |
+| **User Keys**  | Don't set env var                       | Public app, let users bring their own keys | Each user pays for their own usage |
+
+If you don't set `OPENAI_API_KEY` on Vercel, users will see a modal prompting them to enter their own API key when they first use the app. The key is stored securely in their browser session.
+
+📘 **[View detailed deployment guide →](DEPLOYMENT.md)**
+
+**Why not GitHub Pages?** GitHub Pages only supports static files. Next.js API routes require a Node.js server, which Vercel provides automatically.
 
 ### Testing
 
@@ -285,8 +326,9 @@ For greetings or out-of-scope requests, the response contains only a `message` f
 ```
 src/
   app/
-    page.tsx                    # Main UI
-    api/recommend/route.ts      # API endpoint
+    page.tsx                    # Main UI with API key modal integration
+    layout.tsx                  # Root layout with ApiKeyProvider
+    api/recommend/route.ts      # API endpoint (supports env var + custom keys)
   lib/
     agents-sdk/
       agents/                   # 5 specialized agents
@@ -295,7 +337,7 @@ src/
         outOfScopeAgent.ts      # Handles non-movie requests
         parserAgent.ts          # Extracts preferences + searches
         rankerAgent.ts          # Sorts + explains results
-        index.ts                # Entry point for multi-agent system
+        index.ts                # Entry point (supports custom API keys)
       tools/                    # External functionality
         catalogSearchTool.ts    # Search catalog by preferences
       guardrails/               # Input/output validation
@@ -305,6 +347,9 @@ src/
       util/helpers.ts           # Helper functions (search logic)
   components/
     MovieCard.tsx               # UI component for recommendations
+    ApiKeyModal.tsx             # Modal for API key input
+  contexts/
+    ApiKeyContext.tsx           # API key state management
   data/
     catalog.json                # Movie and show database (220 items)
   types/
@@ -316,6 +361,7 @@ docs/
   WORKSHOP.md                   # Step-by-step implementation guide
   PITCH.md                      # Project vision and problem statement
   TEST_PROMPTS.md               # Test cases for all scenarios
+DEPLOYMENT.md                   # Detailed deployment guide (new)
 tests/
   api-recommend.test.ts         # Automated API tests
 ```
@@ -332,6 +378,35 @@ Movie & Show Picker demonstrates how to build intelligent systems that:
 - **Scale gracefully** - Multi-agent architecture handles complexity through specialization
 
 The same principles apply to any domain requiring intelligent decision-making: customer support, content moderation, data analysis, workflow automation, and more.
+
+---
+
+## Security & API Key Management
+
+This application implements a flexible API key management system that works for both local development and production deployments:
+
+### How It Works
+
+1. **Environment Variable (Server-Side)**: If `OPENAI_API_KEY` is set in `.env.local` or Vercel environment variables, it's used automatically for all users
+2. **Runtime Input (Client-Side)**: If no environment variable is found, users are prompted to enter their own API key via a modal dialog
+3. **Session Storage**: Client-provided keys are stored in browser session storage (cleared when browser tab closes)
+4. **Secure Transmission**: Keys are sent to your Next.js API route, then to OpenAI's API
+
+### Security Best Practices
+
+✅ **Use environment variables for private deployments** - Set on Vercel for internal tools  
+✅ **Use runtime input for public apps** - Let users bring their own keys  
+✅ **Keys are stored in sessionStorage** - More secure than localStorage, cleared on tab close  
+✅ **Never commit `.env.local`** - Already in `.gitignore`, keep it that way  
+✅ **HTTPS in production** - Vercel provides this automatically  
+✅ **Monitor API usage** - Set spending limits on OpenAI dashboard
+
+### Important Notes
+
+- **GitHub Pages deployments**: Since GitHub Pages is static hosting, the app will always prompt users for API keys
+- **Cost management**: When users provide their own keys, they pay for their own API usage
+- **Rate limiting**: Individual keys help distribute load and avoid rate limits
+- **Never share API keys**: Each user should use their own OpenAI API key
 
 ---
 

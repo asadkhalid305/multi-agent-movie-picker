@@ -21,11 +21,26 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Get API key from header (if provided by client) or fall back to environment
+    const clientApiKey = request.headers.get("x-openai-api-key");
+    const apiKey = clientApiKey || process.env.OPENAI_API_KEY;
+
+    // Validate that we have an API key from either source
+    if (!apiKey) {
+      return NextResponse.json(
+        {
+          error:
+            "OpenAI API key is required. Please provide it via the application or set OPENAI_API_KEY environment variable.",
+        },
+        { status: 401 }
+      );
+    }
+
     let response: RecommendResponse;
 
     try {
-      // Execute the multi-agent system with the user message
-      const result = await executeMultiAgentSystem(message);
+      // Execute the multi-agent system with the user message and API key
+      const result = await executeMultiAgentSystem(message, apiKey);
 
       // Format the response
       response = formatResponse(result);
