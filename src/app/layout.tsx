@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import ThemeToggle from "./ThemeScript";
+import { ApiKeyProvider } from "@/contexts/ApiKeyContext";
 
 export const metadata: Metadata = {
   title: "Movie & Show Picker",
@@ -35,7 +36,7 @@ export default function RootLayout({
       </head>
       <body className="bg-white dark:bg-[#202020] transition-all duration-300 ease-in-out">
         <ThemeToggle />
-        {children}
+        <ApiKeyProvider>{children}</ApiKeyProvider>
       </body>
     </html>
   );

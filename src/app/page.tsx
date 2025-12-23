@@ -1,42 +1,80 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { RecommendResponse, RecommendItem } from "@/types/api";
 import MovieCard from "@/components/MovieCard";
-import { CornerDownLeft, Loader } from "lucide-react";
+import ApiKeyModal from "@/components/ApiKeyModal";
+import { useApiKey } from "@/contexts/ApiKeyContext";
+import { CornerDownLeft, Loader, Key as KeyIcon } from "lucide-react";
 
 export default function Home() {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [response, setResponse] = useState<RecommendResponse | null>(null);
+  const [showModal, setShowModal] = useState(false);
+
+  const { apiKey, setApiKey, hasApiKey, clearApiKey } = useApiKey();
+
+  // Check if API key is needed (not in session storage)
+  useEffect(() => {
+    if (!hasApiKey) {
+      setShowModal(true);
+    }
+  }, [hasApiKey]);
+
+  const handleModalSubmit = (key: string) => {
+    setApiKey(key);
+    setShowModal(false);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!hasApiKey) {
+      setShowModal(true);
+      setError("Please provide your OpenAI API key to use this application.");
+      return;
+    }
+
     setLoading(true);
     setError("");
     setResponse(null);
 
     try {
+      const headers: HeadersInit = {
+        "Content-Type": "application/json",
+      };
+
+      // Add API key to headers if available from client
+      if (apiKey) {
+        headers["x-openai-api-key"] = apiKey;
+      }
+
       const res = await fetch("/api/recommend", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers,
         body: JSON.stringify({ message }),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error || "Something went wrong");
+        if (res.status === 401) {
+          setShowModal(true);
+          setError(
+            "Please provide your OpenAI API key to use this application."
+          );
+        } else {
+          setError(data.error || "Something went wrong");
+        }
         return;
       }
 
       setResponse(data);
       setMessage("");
-    } catch (err) {
-      setError("Failed to connect to the server");
+    } catch (err: any) {
+      setError(err.message || "Failed to get recommendations");
     } finally {
       setLoading(false);
     }
@@ -51,8 +89,24 @@ export default function Home() {
     }
   };
 
+  const handleChangeApiKey = () => {
+    // Don't clear the key, just open the modal
+    // User can close it if they change their mind
+    setShowModal(true);
+  };
+
   return (
     <main className="min-h-screen bg-white dark:bg-[#202020] py-12 px-4 sm:px-6 lg:px-8 transition-colors">
+      <ApiKeyModal
+        isOpen={showModal}
+        canClose={hasApiKey} // Only allow closing if they already have a key
+        existingKey={apiKey || ""} // Pre-fill with existing key when changing
+        onClose={() => {
+          setShowModal(false);
+        }}
+        onSubmit={handleModalSubmit}
+      />
+
       <div className="max-w-3xl mx-auto">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-2">
@@ -62,6 +116,15 @@ export default function Home() {
             Tell us what you&apos;re looking for, and we&apos;ll recommend
             something great.
           </p>
+          {hasApiKey && (
+            <button
+              onClick={handleChangeApiKey}
+              className="mt-3 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors inline-flex items-center gap-1"
+            >
+              <KeyIcon size={14} />
+              Change API Key
+            </button>
+          )}
         </div>
 
         <form onSubmit={handleSubmit} className="mb-8">
