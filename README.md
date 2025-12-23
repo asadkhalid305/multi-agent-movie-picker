@@ -8,6 +8,14 @@ This project demonstrates how to build intelligent, context-aware recommendation
 
 ---
 
+## Demo
+
+![Watch Demo On Youtube](assets/demo-thumbnail.png)
+
+[▶️ Watch Demo on YouTube](https://youtube.com/shorts/XWmIb7g4oiw?feature=share)
+
+---
+
 ## 🎯 Two Ways to Use This Repository
 
 ### 1. **Use the Working Application** (main branch)
