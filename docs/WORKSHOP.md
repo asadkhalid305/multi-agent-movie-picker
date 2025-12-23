@@ -1,6 +1,40 @@
-# Multi-Agent Movie Picker Workshop Guide
+# Multi-Agent System Workshop Guide
 
-**Welcome!** This guide walks you through building a complete multi-agent system step-by-step. Follow along during the live workshop, or use this as a self-paced guide if you're learning independently.
+**Welcome!** This guide walks you through building a complete multi-agent system step-by-step using the [OpenAI Agents SDK](https://openai.github.io/openai-agents-js/). Follow along during a live workshop, or use this as a self-paced learning resource.
+
+**Estimated Time:** 2-3 hours (depending on experience level)
+
+---
+
+## 📚 Table of Contents
+
+### Setup
+
+- [Pre-Workshop: Setup & Prerequisites](#pre-workshop-setup--prerequisites)
+  - [Git Branching Strategy](#git-branching-strategy)
+  - [OpenAI API Key Setup](#openai-api-key-setup)
+  - [Postman Collection](#postman-collection-recommended-for-development)
+  - [Theory & Context](#theory--context)
+
+### Workshop Parts
+
+- [Part 1: Understand the Goal](#part-1-understand-the-goal) _(10 min)_
+- [Part 2: Start with the API Route](#part-2-start-with-the-api-route) _(10 min)_
+- [Part 3: Understand the Request Flow](#part-3-understand-the-request-flow) _(15 min)_
+- [Part 4: Build the Classification Agent](#part-4-build-the-classification-agent-the-orchestrator) _(20 min)_
+- [Part 5: Build the Simple Agents](#part-5-build-the-simple-agents-greeting--out-of-scope) _(20 min)_
+- [Part 6: Build the Recommendation System](#part-6-build-the-recommendation-system) _(40 min)_
+- [Part 7: Add Guardrails](#part-7-add-guardrails-for-safety--validation) _(15 min)_
+- [Part 8: Add Error Handling](#part-8-add-error-handling-to-api-route) _(10 min)_
+
+### Reference
+
+- [Complete System Diagram](#complete-system-diagram)
+- [Testing Checklist](#testing-checklist)
+- [Key Concepts Reference](#key-concepts-reference)
+- [Common Issues & Solutions](#common-issues--solutions)
+- [What You've Built](#what-youve-built)
+- [Additional Resources](#additional-resources)
 
 ---
 
@@ -8,11 +42,12 @@
 
 ### Git Branching Strategy
 
-This repository uses three branches:
+This repository uses a **two-branch strategy** for learning:
 
-- **`main`** - Basic project setup with a single empty endpoint (minimal starting point)
-- **`template`** - Workshop starting branch with project structure and TODOs
-- **`solution`** - Complete implementation built on top of `template` with all features working
+| Branch         | Purpose                         | When to Use                                            |
+| -------------- | ------------------------------- | ------------------------------------------------------ |
+| **`main`**     | Complete working implementation | Reference solution, see final code, run production app |
+| **`template`** | Starting point with TODOs       | Build it yourself, follow this workshop                |
 
 **Recommended approach for the workshop:**
 
@@ -21,17 +56,17 @@ Create your own branch from `template` to work independently:
 ```bash
 # Create and switch to your own working branch
 git checkout template
-git checkout -b my-workshop
+git checkout -b my-implementation
 ```
 
 **Why create a new branch from `template`?**
 
 - Keeps the `template` branch clean as a reference
-- Allows you to start fresh or try different approaches without affecting the template
+- Allows you to start fresh or try different approaches
 - You can always compare your work with the original template
 - Enables experimenting with multiple solutions independently
 
-**Alternative:** If you prefer, you can work directly on the `template` branch:
+**Alternative:** Work directly on the `template` branch if you prefer:
 
 ```bash
 git checkout template
@@ -40,8 +75,8 @@ git checkout template
 **To view the completed solution:**
 
 ```bash
-# Switch to solution branch to see the final implementation
-git checkout solution
+# Switch to main branch to see the final implementation
+git checkout main
 npm run dev
 ```
 
@@ -78,6 +113,15 @@ _(Note: If you're unable to generate an API key, contact me for assistance)_
    OPENAI_DEFAULT_MODEL="gpt-4.1-mini"
    ```
 
+   **Recommended models:**
+
+   - `gpt-4.1-mini` - Most cost-effective, fast (recommended for workshop)
+   - `gpt-4o-mini` - Fast and affordable
+   - `gpt-4o` - Most capable, higher cost
+   - `gpt-4-turbo` - Balanced performance
+
+   See [OpenAI Models Documentation](https://platform.openai.com/docs/models) for details.
+
 4. Save the file. The application will use this key automatically.
 
 **Important:** Never commit `.env.local` to git - it's already in `.gitignore`.
@@ -102,18 +146,24 @@ The collection uses `{{baseUrl}}` variable set to `http://localhost:3000` by def
 
 ### Theory & Context
 
-Before we code, we'll cover the theory:
+Before we code, let's understand the core concepts:
 
-- What are agents?
-- What are guardrails?
-- What are tools?
-- What are handoffs (agent-to-agent communication)?
+- **What are agents?** - Specialized AI entities with specific responsibilities
+- **What are guardrails?** - Validation functions for safety and quality
+- **What are tools?** - Deterministic functions that extend agent capabilities
+- **What are handoffs?** - Agent-to-agent communication and delegation
 
-**Read first**: `docs/PITCH.md` - Understand what we're building and why it matters to users.
+**Recommended Reading:**
+
+1. **[docs/PITCH.md](PITCH.md)** - Understand what we're building and why it matters to users
+2. **[docs/CONCEPTS.md](CONCEPTS.md)** - Detailed explanations of multi-agent concepts
+3. **[OpenAI Agents SDK Docs](https://openai.github.io/openai-agents-js/)** - Official documentation
 
 ---
 
 ## Part 1: Understand the Goal
+
+**⏱️ Estimated Time:** 10 minutes
 
 ### The Application
 
@@ -133,10 +183,10 @@ The system should recognize which type of request it is and respond appropriatel
 
 ### View the Solution
 
-You can check the completed implementation on the `solution` branch at any time:
+You can check the completed implementation on the `main` branch at any time:
 
 ```bash
-git checkout solution
+git checkout main
 npm run dev
 ```
 
@@ -149,7 +199,7 @@ Interact with the UI and notice:
 **Return to your work:**
 
 ```bash
-git checkout live
+git checkout template  # or your branch name
 ```
 
 ### Code Architecture (High Level)
@@ -178,6 +228,8 @@ git checkout live
 
 ## Part 2: Start with the API Route
 
+**⏱️ Estimated Time:** 10 minutes
+
 **File**: `src/app/api/recommend/route.ts`
 
 ### What This File Does
@@ -202,6 +254,8 @@ Find the TODO comment and implement:
 ---
 
 ## Part 3: Understand the Request Flow
+
+**⏱️ Estimated Time:** 15 minutes
 
 Let's think about what needs to happen:
 
@@ -232,6 +286,8 @@ The classification agent is the **orchestrator** — it decides which specialist
 
 ## Part 4: Build the Classification Agent (The Orchestrator)
 
+**⏱️ Estimated Time:** 20 minutes
+
 **File**: `src/lib/agents-sdk/agents/classificationAgent.ts`
 
 ### Purpose
@@ -246,10 +302,10 @@ Classify user intent into one of three categories:
 
 In `classificationAgent.ts`:
 
-- TODO: Use `Agent.create()` to define a new agent
+- TODO: Use `Agent.create()` to define a new agent ([OpenAI Docs](https://openai.github.io/openai-agents-js/classes/Agent.html#create))
 - TODO: Provide the classification instructions (from `instructions.ts`)
-- TODO: Attach the input guardrail (we'll learn about this later)
-- TODO: Add handoffs to the three specialized agents
+- TODO: Attach the input guardrail ([Guardrails Docs](https://openai.github.io/openai-agents-js/functions/defineGuardrail.html))
+- TODO: Add handoffs to the three specialized agents ([Handoffs Docs](https://openai.github.io/openai-agents-js/interfaces/AgentOptions.html#handoffs))
 
 ### The Instructions
 
@@ -258,6 +314,8 @@ The `CLASSIFICATION_AGENT_INSTRUCTIONS` (in `instructions.ts`) are pre-written. 
 - How to classify an intent
 - The three categories
 - When to handoff to each agent
+
+**Key Concept:** The instructions use `RECOMMENDED_PROMPT_PREFIX` from the OpenAI SDK to enable handoff functionality. This prefix provides context about available agents.
 
 ### Entry Point
 
@@ -280,6 +338,8 @@ In `src/app/api/recommend/route.ts`:
 ---
 
 ## Part 5: Build the Simple Agents (Greeting & Out of Scope)
+
+**⏱️ Estimated Time:** 20 minutes
 
 **Files**:
 
@@ -338,6 +398,8 @@ Congratulations! The scaffolding is working. 🎉
 ---
 
 ## Part 6: Build the Recommendation System
+
+**⏱️ Estimated Time:** 40 minutes
 
 Now for the complex part. Three components work together:
 
@@ -442,6 +504,8 @@ If these work, you've built the core system! ✅
 
 ## Part 7: Add Guardrails for Safety & Validation
 
+**⏱️ Estimated Time:** 15 minutes
+
 Now we make the system robust. Two types of guardrails:
 
 ### Input Guardrail
@@ -492,6 +556,8 @@ Study both guardrail files to understand:
 ---
 
 ## Part 8: Add Error Handling to API Route
+
+**⏱️ Estimated Time:** 10 minutes
 
 **File**: `src/app/api/recommend/route.ts`
 
