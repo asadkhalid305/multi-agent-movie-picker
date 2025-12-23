@@ -11,11 +11,13 @@ This project demonstrates how to build intelligent, context-aware recommendation
 ## 🎯 Two Ways to Use This Repository
 
 ### 1. **Use the Working Application** (main branch)
+
 Clone and run immediately - get a production-ready movie recommendation system powered by multi-agent AI.
 
 **Perfect for:** Developers who want to see multi-agent systems in action, or those looking to build upon a working foundation.
 
 ### 2. **Learn Multi-Agent Architecture** (template branch)
+
 Build the entire system yourself, step-by-step, with guided instructions.
 
 **Perfect for:** Engineers learning about AI agent orchestration, handoffs, tools, and guardrails.
@@ -162,20 +164,22 @@ This repository is designed as both a working application and a comprehensive le
 
 The repository uses a **two-branch strategy** for learning:
 
-| Branch | Purpose | Use Case |
-|--------|---------|----------|
-| **`main`** | Complete, working implementation | Reference solution, production use, see it in action |
-| **`template`** | Starting point with TODOs | Build it yourself, step-by-step learning |
+| Branch         | Purpose                          | Use Case                                             |
+| -------------- | -------------------------------- | ---------------------------------------------------- |
+| **`main`**     | Complete, working implementation | Reference solution, production use, see it in action |
+| **`template`** | Starting point with TODOs        | Build it yourself, step-by-step learning             |
 
 ### How to Learn: Build It Yourself
 
 **Step 1:** Check out the template branch
+
 ```bash
 git checkout template
 git checkout -b my-implementation
 ```
 
 **Step 2:** Follow the step-by-step guide in [docs/WORKSHOP.md](docs/WORKSHOP.md), which walks you through:
+
 - Understanding agent architecture and when to use multi-agent systems
 - Implementing each specialized agent
 - Integrating tools for external functionality
@@ -183,11 +187,13 @@ git checkout -b my-implementation
 - Testing and debugging the complete system
 
 **Step 3:** Reference documentation as needed:
+
 - [CONCEPTS.md](docs/CONCEPTS.md) - Core multi-agent concepts explained (agents, handoffs, tools, guardrails)
 - [ARCHITECTURE.md](docs/ARCHITECTURE.md) - System design deep-dive
 - [TEST_PROMPTS.md](docs/TEST_PROMPTS.md) - Comprehensive test scenarios
 
 **Step 4:** Compare with the solution
+
 ```bash
 git checkout main
 npm run dev
@@ -202,7 +208,7 @@ After completing the workshop, you will understand:
 ✅ **Tool Integration** - Extending agents with deterministic functions  
 ✅ **Guardrails** - Implementing safety and validation at system boundaries  
 ✅ **Error Handling** - Managing failures gracefully in multi-agent systems  
-✅ **System Design** - Architecting scalable AI applications  
+✅ **System Design** - Architecting scalable AI applications
 
 ---
 

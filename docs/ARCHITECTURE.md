@@ -89,20 +89,20 @@ The system follows a **layered architecture** with clear separation of concerns:
    - Parse request body
    - Extract message
    - Validate message exists
-   
+
 3. INPUT GUARDRAIL
    ↓
    - Check for offensive content
    - Validate message length
    - Ensure non-empty
    - If fails → Return 400 error
-   
+
 4. CLASSIFICATION AGENT (Orchestrator)
    ↓
    - Analyze user intent
    - Classify as: greeting | recommendation | out_of_scope
    - Decide which agent to handoff to
-   
+
 5A. GREETING PATH             5B. RECOMMENDATION PATH         5C. OUT OF SCOPE PATH
     ↓                             ↓                               ↓
     Greeting Agent                Parser Agent                    Out of Scope Agent
@@ -137,7 +137,7 @@ The system follows a **layered architecture** with clear separation of concerns:
    - Transform agent result
    - Add metadata (timestamp, etc.)
    - Structure JSON response
-   
+
 7. RETURN TO USER
    ↓
    200 OK (success)
@@ -168,6 +168,7 @@ The system follows a **layered architecture** with clear separation of concerns:
 ```
 
 **Key Points:**
+
 - Classification agent never generates final responses
 - Always hands off to a specialist
 - Specialists don't hand back to classification
@@ -187,6 +188,7 @@ The system follows a **layered architecture** with clear separation of concerns:
 ```
 
 **Key Points:**
+
 - Parser doesn't generate final output
 - Parser focuses on search, Ranker focuses on presentation
 - Clear handoff of structured data (search results)
@@ -212,6 +214,7 @@ The system follows a **layered architecture** with clear separation of concerns:
 ```
 
 **Key Points:**
+
 - Tools are synchronous/deterministic
 - Agent decides when to use tool
 - Agent interprets tool results
@@ -274,6 +277,7 @@ Response Formatter
 - **No session management** - No login or user tracking
 
 **Implications:**
+
 - ✅ Simple and scalable
 - ✅ Easy to test and debug
 - ✅ No data persistence concerns
@@ -319,24 +323,17 @@ try {
   // 1. Input Guardrail Check
   const result = await executeMultiAgentSystem(message);
   // 2. Output Guardrail Check (inside agent system)
-  
 } catch (error) {
   if (error instanceof InputGuardrailTripwireTriggered) {
     // User's fault - bad input
-    return NextResponse.json(
-      { error: error.message },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: error.message }, { status: 400 });
   }
-  
+
   if (error instanceof OutputGuardrailTripwireTriggered) {
     // System's fault - bad output
-    return NextResponse.json(
-      { error: "Processing error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Processing error" }, { status: 500 });
   }
-  
+
   // Unknown error
   return NextResponse.json(
     { error: "An unexpected error occurred" },
@@ -362,90 +359,96 @@ Request → [Input Guardrail] → Agent System → [Output Guardrail] → Respon
 
 ### Frontend (`src/app/`, `src/components/`)
 
-| Component | Responsibility |
-|-----------|----------------|
-| `page.tsx` | Main UI, user input, display results |
-| `MovieCard.tsx` | Render individual recommendations |
-| `layout.tsx` | App shell, metadata, global styles |
-| `ThemeScript.tsx` | Dark/light theme management |
-| `globals.css` | Global styles (Tailwind) |
+| Component         | Responsibility                       |
+| ----------------- | ------------------------------------ |
+| `page.tsx`        | Main UI, user input, display results |
+| `MovieCard.tsx`   | Render individual recommendations    |
+| `layout.tsx`      | App shell, metadata, global styles   |
+| `ThemeScript.tsx` | Dark/light theme management          |
+| `globals.css`     | Global styles (Tailwind)             |
 
 ### API Layer (`src/app/api/recommend/`)
 
-| Function | Responsibility |
-|----------|----------------|
+| Function              | Responsibility                                                |
+| --------------------- | ------------------------------------------------------------- |
 | `POST /api/recommend` | Parse request, execute agents, handle errors, format response |
 
 ### Agent System (`src/lib/agents-sdk/agents/`)
 
-| Agent | Responsibility |
-|-------|----------------|
-| `classificationAgent.ts` | Route to appropriate specialist based on intent |
-| `greetingAgent.ts` | Respond to greetings warmly |
-| `outOfScopeAgent.ts` | Decline non-movie requests politely |
-| `parserAgent.ts` | Extract preferences, search catalog, handoff to ranker |
-| `rankerAgent.ts` | Sort results, generate explanations, format JSON |
+| Agent                    | Responsibility                                         |
+| ------------------------ | ------------------------------------------------------ |
+| `classificationAgent.ts` | Route to appropriate specialist based on intent        |
+| `greetingAgent.ts`       | Respond to greetings warmly                            |
+| `outOfScopeAgent.ts`     | Decline non-movie requests politely                    |
+| `parserAgent.ts`         | Extract preferences, search catalog, handoff to ranker |
+| `rankerAgent.ts`         | Sort results, generate explanations, format JSON       |
 
 ### Tools (`src/lib/agents-sdk/tools/`)
 
-| Tool | Responsibility |
-|------|----------------|
+| Tool                   | Responsibility                                   |
+| ---------------------- | ------------------------------------------------ |
 | `catalogSearchTool.ts` | Search catalog by type, genres, time constraints |
 
 ### Guardrails (`src/lib/agents-sdk/guardrails/`)
 
-| Guardrail | Responsibility |
-|-----------|----------------|
-| `inputGuardrail.ts` | Validate user input for safety and format |
+| Guardrail            | Responsibility                                    |
+| -------------------- | ------------------------------------------------- |
+| `inputGuardrail.ts`  | Validate user input for safety and format         |
 | `outputGuardrail.ts` | Validate agent output for correctness and quality |
 
 ### Utilities
 
-| File | Responsibility |
-|------|----------------|
-| `instructions.ts` | Agent instructions (behavior definitions) |
-| `helpers.ts` | Search logic, utility functions |
+| File                   | Responsibility                                |
+| ---------------------- | --------------------------------------------- |
+| `instructions.ts`      | Agent instructions (behavior definitions)     |
+| `helpers.ts`           | Search logic, utility functions               |
 | `responseFormatter.ts` | Transform agent output to API response format |
 
 ### Data
 
-| File | Responsibility |
-|------|----------------|
+| File           | Responsibility                      |
+| -------------- | ----------------------------------- |
 | `catalog.json` | Movie and show database (220 items) |
 
 ### Types
 
-| File | Responsibility |
-|------|----------------|
+| File       | Responsibility                      |
+| ---------- | ----------------------------------- |
 | `agent.ts` | Agent-related TypeScript interfaces |
-| `api.ts` | API request/response types |
+| `api.ts`   | API request/response types          |
 
 ---
 
 ## Technology Stack
 
 ### Core Framework
+
 - **Next.js 15** - React framework with App Router
 - **React 19** - UI library
 - **TypeScript 5** - Type safety
 
 ### AI/Agents
+
 - **OpenAI Agents SDK** (`@openai/agents`) - Multi-agent orchestration
 - **Zod** - Schema validation for tools
 
 ### Styling
+
 - **Tailwind CSS** - Utility-first CSS
 - **Lucide React** - Icon library
 
 ### Testing
+
 - **Jest** - Unit and integration tests
 - **Postman Collection** - API testing
 
 ### Development
+
 - **ESLint** - Code linting
 - **PostCSS** - CSS processing
 
 ### Deployment
+
 - **Vercel** (recommended) - Serverless Next.js hosting
 - **Node.js 18+** - Runtime environment
 
@@ -454,24 +457,31 @@ Request → [Input Guardrail] → Agent System → [Output Guardrail] → Respon
 ## Design Principles
 
 ### 1. Separation of Concerns
+
 Each agent, tool, and guardrail has ONE clear responsibility.
 
 ### 2. Fail Fast
+
 Guardrails catch errors at boundaries (input/output) before they propagate.
 
 ### 3. Composability
+
 Agents can be reused and combined in different workflows.
 
 ### 4. Testability
+
 Each component can be tested in isolation.
 
 ### 5. Clarity
+
 Code structure mirrors conceptual architecture - easy to understand.
 
 ### 6. Statelessness
+
 No session management - each request is independent and simple.
 
 ### 7. Error Transparency
+
 Different error types return different status codes (400 vs 500).
 
 ---
@@ -479,12 +489,14 @@ Different error types return different status codes (400 vs 500).
 ## Scaling Considerations
 
 ### Current Limitations
+
 - Single catalog file (220 items) - not scalable to large datasets
 - Synchronous processing - can't handle high concurrency
 - No caching - repeated queries aren't optimized
 - No rate limiting - vulnerable to abuse
 
 ### Future Enhancements
+
 - **Database integration** - Replace catalog.json with PostgreSQL/MongoDB
 - **Caching layer** - Redis for frequent queries
 - **Async processing** - Queue system for high load

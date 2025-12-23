@@ -158,6 +158,7 @@ We built **one tool**: `catalogSearchTool`
 **Purpose:** Search the movie/show catalog based on extracted preferences
 
 **Parameters:**
+
 - `typePreference` - "movie", "show", or "any"
 - `genresInclude` - Array of genre names
 - `timeLimitMinutes` - Optional runtime constraint
@@ -171,14 +172,14 @@ import { z } from "zod";
 export const catalogSearchTool = defineTool({
   name: "catalogSearchTool",
   description: "Searches the catalog for movies and shows...",
-  
+
   // Schema defines parameters and their validation
   schema: z.object({
     typePreference: z.enum(["movie", "show", "any"]),
     genresInclude: z.array(z.string()),
     timeLimitMinutes: z.number().nullable(),
   }),
-  
+
   // Execute function contains the actual logic
   execute: async (query) => {
     const results = searchCatalog(query);
@@ -213,6 +214,7 @@ We implemented **two guardrails**:
 **Attached to:** Classification Agent  
 **Purpose:** Validate user requests BEFORE processing  
 **Checks:**
+
 - Offensive or harmful language
 - Message length (not too long)
 - Empty or invalid inputs
@@ -224,6 +226,7 @@ We implemented **two guardrails**:
 **Attached to:** Ranker Agent  
 **Purpose:** Validate recommendations AFTER generation  
 **Checks:**
+
 - Proper JSON format
 - Required fields present (name, type, genres, etc.)
 - No hallucinated (made-up) movie titles
@@ -238,7 +241,7 @@ import { defineGuardrail } from "@openai/agents";
 
 export const myGuardrail = defineGuardrail({
   name: "My Guardrail",
-  
+
   // Check function performs validation
   check: async (input) => {
     if (/* validation fails */) {
@@ -254,13 +257,13 @@ export const myGuardrail = defineGuardrail({
 
 ### Input vs Output Guardrails
 
-| Aspect | Input Guardrail | Output Guardrail |
-|--------|----------------|------------------|
-| **When** | Before agent processing | After agent completes |
-| **Attached to** | First agent (Classification) | Last agent (Ranker) |
-| **Purpose** | Validate user input | Validate system output |
-| **Error** | 400 Bad Request | 500 Server Error |
-| **Example** | Check for offensive content | Check for valid JSON format |
+| Aspect          | Input Guardrail              | Output Guardrail            |
+| --------------- | ---------------------------- | --------------------------- |
+| **When**        | Before agent processing      | After agent completes       |
+| **Attached to** | First agent (Classification) | Last agent (Ranker)         |
+| **Purpose**     | Validate user input          | Validate system output      |
+| **Error**       | 400 Bad Request              | 500 Server Error            |
+| **Example**     | Check for offensive content  | Check for valid JSON format |
 
 **Reference:** [OpenAI Agents SDK - Guardrails](https://openai.github.io/openai-agents-js/functions/defineGuardrail.html)
 
@@ -334,13 +337,13 @@ export const myGuardrail = defineGuardrail({
 
 **Why we use 5 agents instead of 1:**
 
-| Agent | Why Separate? |
-|-------|---------------|
-| **Classification** | Different intents need different handling |
-| **Greeting** | Simple, reusable, no need for tools |
-| **Out of Scope** | Consistent decline message, no processing needed |
-| **Parser** | Complex logic: extract preferences + use tools + handle OR/AND |
-| **Ranker** | Focused on sorting + explanation generation + output validation |
+| Agent              | Why Separate?                                                   |
+| ------------------ | --------------------------------------------------------------- |
+| **Classification** | Different intents need different handling                       |
+| **Greeting**       | Simple, reusable, no need for tools                             |
+| **Out of Scope**   | Consistent decline message, no processing needed                |
+| **Parser**         | Complex logic: extract preferences + use tools + handle OR/AND  |
+| **Ranker**         | Focused on sorting + explanation generation + output validation |
 
 If we used one agent, the instructions would be 10x longer, harder to maintain, and less testable.
 
@@ -357,14 +360,14 @@ This workshop uses the **OpenAI Agents SDK** for JavaScript/TypeScript.
 
 ### Key APIs Used in This Workshop
 
-| Concept | SDK Function | Documentation |
-|---------|-------------|---------------|
-| **Create Agent** | `Agent.create()` | [Agent Class](https://openai.github.io/openai-agents-js/classes/Agent.html#create) |
-| **Define Tool** | `defineTool()` | [Tools Guide](https://openai.github.io/openai-agents-js/functions/defineTool.html) |
-| **Define Guardrail** | `defineGuardrail()` | [Guardrails Guide](https://openai.github.io/openai-agents-js/functions/defineGuardrail.html) |
-| **Handoffs** | `handoffs: [...]` | [Agent Options](https://openai.github.io/openai-agents-js/interfaces/AgentOptions.html#handoffs) |
-| **Instructions** | `instructions: "..."` | [Agent Options](https://openai.github.io/openai-agents-js/interfaces/AgentOptions.html#instructions) |
-| **Enable Handoffs** | `RECOMMENDED_PROMPT_PREFIX` | [Extensions](https://openai.github.io/openai-agents-js/modules.html) |
+| Concept              | SDK Function                | Documentation                                                                                        |
+| -------------------- | --------------------------- | ---------------------------------------------------------------------------------------------------- |
+| **Create Agent**     | `Agent.create()`            | [Agent Class](https://openai.github.io/openai-agents-js/classes/Agent.html#create)                   |
+| **Define Tool**      | `defineTool()`              | [Tools Guide](https://openai.github.io/openai-agents-js/functions/defineTool.html)                   |
+| **Define Guardrail** | `defineGuardrail()`         | [Guardrails Guide](https://openai.github.io/openai-agents-js/functions/defineGuardrail.html)         |
+| **Handoffs**         | `handoffs: [...]`           | [Agent Options](https://openai.github.io/openai-agents-js/interfaces/AgentOptions.html#handoffs)     |
+| **Instructions**     | `instructions: "..."`       | [Agent Options](https://openai.github.io/openai-agents-js/interfaces/AgentOptions.html#instructions) |
+| **Enable Handoffs**  | `RECOMMENDED_PROMPT_PREFIX` | [Extensions](https://openai.github.io/openai-agents-js/modules.html)                                 |
 
 ### Additional Learning Resources
 
