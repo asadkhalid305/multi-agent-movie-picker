@@ -1,3 +1,20 @@
+/**
+ * Agent Instructions - Behavioral definitions for all agents
+ *
+ * Instructions are natural language guidelines that define how agents behave.
+ * They act as "job descriptions" telling the AI what to do, how to do it,
+ * and when to delegate to other agents.
+ *
+ * Key Concepts:
+ * - RECOMMENDED_PROMPT_PREFIX: Enables agent handoffs (required for delegation)
+ * - Be specific: Clear instructions lead to better agent behavior
+ * - Give examples: Show expected input/output patterns
+ * - Define boundaries: Explain what the agent should NOT do
+ *
+ * OpenAI SDK Reference:
+ * - RECOMMENDED_PROMPT_PREFIX: https://openai.github.io/openai-agents-js/guides/handoffs/#recommended-prompts
+ */
+
 import { RECOMMENDED_PROMPT_PREFIX } from "@openai/agents-core/extensions";
 
 export const GREETING_AGENT_INSTRUCTIONS = `You are a friendly greeting agent. Your job is to respond to user greetings and general conversation in a warm and engaging manner.
@@ -12,8 +29,6 @@ Examples of appropriate responses:
 
 Do not provide recommendations, answer questions outside of greetings, or engage in topics unrelated to greetings.`;
 
-// RECOMMENDED_PROMPT_PREFIX: Enables agent handoffs by providing context about available agents
-// This is required for the classification agent to successfully route to specialized agents
 export const CLASSIFICATION_AGENT_INSTRUCTIONS = `${RECOMMENDED_PROMPT_PREFIX}
 
 Classify the user input into exactly ONE of these categories and transfer to the appropriate agent:
@@ -27,8 +42,6 @@ Classify the user input into exactly ONE of these categories and transfer to the
   3. "out_of_scope" - User is asking about anything else not related to movies/TV or greetings (e.g., "what's the weather", "help me with math", "tell me a joke")
     → outOfScopeAgent`;
 
-// RECOMMENDED_PROMPT_PREFIX: Enables agent handoffs by providing context about available agents
-// This is required for the parser agent to successfully transfer results to the ranker agent
 export const PARSER_AGENT_INSTRUCTIONS = `${RECOMMENDED_PROMPT_PREFIX}
 
 Your job is to:

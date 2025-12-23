@@ -1,8 +1,24 @@
-# Multi-Agent Movie Picker
+# Multi-Agent Movie Recommendation System
 
-_End decision fatigue. Get personalized movie and show recommendations in seconds._
+_A production-ready Next.js application AND comprehensive learning resource for building multi-agent AI systems._
 
-A Next.js application powered by a multi-agent AI system that understands natural language and delivers intelligent, context-aware recommendations.
+**End decision fatigue. Get personalized movie and show recommendations in seconds.**
+
+This project demonstrates how to build intelligent, context-aware recommendation systems using the [OpenAI Agents SDK](https://openai.github.io/openai-agents-js/). It serves as both a working application and an educational workshop for learning multi-agent architecture.
+
+---
+
+## 🎯 Two Ways to Use This Repository
+
+### 1. **Use the Working Application** (main branch)
+Clone and run immediately - get a production-ready movie recommendation system powered by multi-agent AI.
+
+**Perfect for:** Developers who want to see multi-agent systems in action, or those looking to build upon a working foundation.
+
+### 2. **Learn Multi-Agent Architecture** (template branch)
+Build the entire system yourself, step-by-step, with guided instructions.
+
+**Perfect for:** Engineers learning about AI agent orchestration, handoffs, tools, and guardrails.
 
 ---
 
@@ -23,22 +39,25 @@ The system understands your intent, extracts constraints (time, genre, mood), se
 - **Natural Language Understanding** - Describe what you want in plain English
 - **Context-Aware** - Understands time constraints, mood preferences, and group dynamics
 - **Multi-Agent Architecture** - Specialized agents handle classification, parsing, ranking, and validation
-- **Intelligent Ranking** - Results are sorted by relevance with personalized explanations
+- **Intelligent Ranking** - Results sorted by relevance with personalized explanations
 - **Safety Guardrails** - Input and output validation for content safety
+- **Built with OpenAI Agents SDK** - Production-ready agent orchestration framework
 
 ---
 
-## How It Works
+## How It Works - Multi-Agent Architecture
 
-The system uses a **multi-agent architecture** where specialized AI agents collaborate:
+The system uses a **multi-agent architecture** powered by the [OpenAI Agents SDK](https://openai.github.io/openai-agents-js/), where specialized AI agents collaborate:
 
 1. **Classification Agent** - Determines intent (greeting, recommendation, or out-of-scope)
 2. **Parser Agent** - Extracts preferences (genre, type, time limits) and searches the catalog
-3. **Ranker Agent** - Sorts results by relevance and generates explanations
+3. **Ranker Agent** - Sorts results by relevance and generates personalized explanations
 4. **Greeting Agent** - Handles conversational greetings
 5. **Out-of-Scope Agent** - Politely declines unrelated requests
 
 Each agent has one clear responsibility, uses pre-defined instructions, and can hand off control to other agents. The parser agent uses a **catalog search tool** (a deterministic function) to query the movie/show database. **Input and output guardrails** validate content at system boundaries.
+
+**Learn more:** See [CONCEPTS.md](docs/CONCEPTS.md) for detailed explanations and [ARCHITECTURE.md](docs/ARCHITECTURE.md) for system design.
 
 ---
 
@@ -54,7 +73,7 @@ Each agent has one clear responsibility, uses pre-defined instructions, and can 
 
 ```bash
 # Clone the repository
-git clone <repository-url>
+git clone https://github.com/yourusername/multi-agent-movie-picker.git
 cd multi-agent-movie-picker
 
 # Install dependencies
@@ -62,9 +81,9 @@ npm install
 
 # Set up environment variables
 cp .env.local.example .env.local
-# Edit .env.local and add your OpenAI API key and OpenAI model:
+# Edit .env.local and add your OpenAI API key and preferred model:
 # OPENAI_API_KEY="sk-proj-your-actual-api-key-here"
-# OPENAI_DEFAULT_MODEL=gpt-4.1-mini
+# OPENAI_DEFAULT_MODEL="gpt-4.1-mini"
 
 # Run the development server
 npm run dev
@@ -128,6 +147,65 @@ tests/
 
 ---
 
+## Learning Path 🎓
+
+This repository is designed as both a working application and a comprehensive learning resource for building multi-agent systems.
+
+### Prerequisites for Learning
+
+- Basic understanding of TypeScript/React
+- Familiarity with REST APIs
+- OpenAI API account ([Get API key here](https://platform.openai.com/api-keys))
+- Understanding of async/await and promises
+
+### Workshop Structure
+
+The repository uses a **two-branch strategy** for learning:
+
+| Branch | Purpose | Use Case |
+|--------|---------|----------|
+| **`main`** | Complete, working implementation | Reference solution, production use, see it in action |
+| **`template`** | Starting point with TODOs | Build it yourself, step-by-step learning |
+
+### How to Learn: Build It Yourself
+
+**Step 1:** Check out the template branch
+```bash
+git checkout template
+git checkout -b my-implementation
+```
+
+**Step 2:** Follow the step-by-step guide in [docs/WORKSHOP.md](docs/WORKSHOP.md), which walks you through:
+- Understanding agent architecture and when to use multi-agent systems
+- Implementing each specialized agent
+- Integrating tools for external functionality
+- Adding guardrails for safety and validation
+- Testing and debugging the complete system
+
+**Step 3:** Reference documentation as needed:
+- [CONCEPTS.md](docs/CONCEPTS.md) - Core multi-agent concepts explained (agents, handoffs, tools, guardrails)
+- [ARCHITECTURE.md](docs/ARCHITECTURE.md) - System design deep-dive
+- [TEST_PROMPTS.md](docs/TEST_PROMPTS.md) - Comprehensive test scenarios
+
+**Step 4:** Compare with the solution
+```bash
+git checkout main
+npm run dev
+```
+
+### Learning Outcomes
+
+After completing the workshop, you will understand:
+
+✅ **Agent Specialization** - When and how to break problems into specialized agents  
+✅ **Agent Communication** - How agents hand off control to each other  
+✅ **Tool Integration** - Extending agents with deterministic functions  
+✅ **Guardrails** - Implementing safety and validation at system boundaries  
+✅ **Error Handling** - Managing failures gracefully in multi-agent systems  
+✅ **System Design** - Architecting scalable AI applications  
+
+---
+
 ## API Reference
 
 ### POST /api/recommend
@@ -168,59 +246,73 @@ Send a natural language message and receive movie/show recommendations.
 
 For greetings or out-of-scope requests, the response contains only a `message` field with a text response.
 
----
+**Error Responses:**
 
-## Learning & Building the System
+```json
+// 400 Bad Request (Input validation failed)
+{
+  "error": "Message contains inappropriate content"
+}
 
-This project is designed to teach multi-agent system architecture. The repository uses a branching strategy to support learning:
-
-### Branch Strategy
-
-- **`main`** - Basic project setup with a single empty endpoint (starting point)
-- **`template`** - Workshop starting point with structure and TODOs for implementation
-- **`solution`** - Complete implementation built on top of `template` with all features working
-
-**To build the system yourself:**
-
-1. **Recommended approach:** Create your own branch from `template` to work independently:
-
-   ```bash
-   git checkout template
-   git checkout -b my-workshop
-   ```
-
-   This keeps the `template` branch clean, allowing you to reference it later or start fresh for different implementations.
-
-2. **Alternative:** Work directly on the `template` branch:
-
-   ```bash
-   git checkout template
-   ```
-
-3. Follow the step-by-step guide in [`docs/WORKSHOP.md`](docs/WORKSHOP.md), which walks you through:
-
-   - Understanding agent architecture
-   - Implementing each specialized agent
-   - Integrating tools and guardrails
-   - Testing and debugging
-
-4. Reference the `solution` branch anytime to see the complete implementation:
-   ```bash
-   git checkout solution
-   npm run dev
-   ```
-
-The workshop guide (`WORKSHOP.md`) provides detailed instructions, code snippets, and explanations for building the entire system from scratch. It's designed for both live workshops and self-paced learning.
+// 500 Server Error (Output validation failed or system error)
+{
+  "error": "An error occurred while processing your request"
+}
+```
 
 ---
 
 ## Tech Stack
 
 - **Framework:** Next.js 15 (App Router)
-- **Language:** TypeScript
-- **AI/Agents:** OpenAI API with multi-agent orchestration
+- **Language:** TypeScript 5
+- **AI/Agents:** [OpenAI Agents SDK](https://openai.github.io/openai-agents-js/) - Multi-agent orchestration framework
+- **Schema Validation:** Zod (for tool parameters)
 - **Styling:** Tailwind CSS
+- **Icons:** Lucide React
 - **Testing:** Jest
+
+---
+
+## Project Structure
+
+```
+src/
+  app/
+    page.tsx                    # Main UI
+    api/recommend/route.ts      # API endpoint
+  lib/
+    agents-sdk/
+      agents/                   # 5 specialized agents
+        classificationAgent.ts  # Orchestrator - routes to specialists
+        greetingAgent.ts        # Handles greetings
+        outOfScopeAgent.ts      # Handles non-movie requests
+        parserAgent.ts          # Extracts preferences + searches
+        rankerAgent.ts          # Sorts + explains results
+        index.ts                # Entry point for multi-agent system
+      tools/                    # External functionality
+        catalogSearchTool.ts    # Search catalog by preferences
+      guardrails/               # Input/output validation
+        inputGuardrail.ts       # Validates user input for safety
+        outputGuardrail.ts      # Validates agent output for quality
+      instructions.ts           # Agent instructions (behavior definitions)
+      util/helpers.ts           # Helper functions (search logic)
+  components/
+    MovieCard.tsx               # UI component for recommendations
+  data/
+    catalog.json                # Movie and show database (220 items)
+  types/
+    agent.ts                    # Agent-related types
+    api.ts                      # API types
+docs/
+  CONCEPTS.md                   # Multi-agent concepts explained
+  ARCHITECTURE.md               # System design deep-dive
+  WORKSHOP.md                   # Step-by-step implementation guide
+  PITCH.md                      # Project vision and problem statement
+  TEST_PROMPTS.md               # Test cases for all scenarios
+tests/
+  api-recommend.test.ts         # Automated API tests
+```
 
 ---
 
@@ -239,9 +331,31 @@ The same principles apply to any domain requiring intelligent decision-making: c
 
 ## Additional Resources
 
-- **[PITCH.md](docs/PITCH.md)** - Project vision, problem statement, and user experience
-- **[WORKSHOP.md](docs/WORKSHOP.md)** - Complete implementation guide with step-by-step instructions
-- **[TEST_PROMPTS.md](docs/TEST_PROMPTS.md)** - Comprehensive test cases for all scenarios
+### Documentation
+
+- **[WORKSHOP.md](docs/WORKSHOP.md)** - Complete step-by-step implementation guide for building the system yourself
+- **[CONCEPTS.md](docs/CONCEPTS.md)** - Multi-agent architecture concepts explained (agents, handoffs, tools, guardrails)
+- **[ARCHITECTURE.md](docs/ARCHITECTURE.md)** - System design, data flow, and error handling strategies
+- **[PITCH.md](docs/PITCH.md)** - Project vision, problem statement, and user experience philosophy
+- **[TEST_PROMPTS.md](docs/TEST_PROMPTS.md)** - Comprehensive test cases covering all scenarios
+
+### External Resources
+
+- **[OpenAI Agents SDK Documentation](https://openai.github.io/openai-agents-js/)** - Official SDK docs
+- **[OpenAI Platform Documentation](https://platform.openai.com/docs)** - API reference and guides
+- **[OpenAI Agents SDK GitHub](https://github.com/openai/openai-agents-js)** - Source code and examples
+
+---
+
+## Contributing
+
+This project was created for educational purposes. If you find issues or have suggestions for improving the learning experience:
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/improvement`)
+3. Commit your changes (`git commit -m 'Add some improvement'`)
+4. Push to the branch (`git push origin feature/improvement`)
+5. Open a Pull Request
 
 ---
 

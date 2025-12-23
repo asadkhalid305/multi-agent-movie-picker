@@ -1,6 +1,7 @@
 {
   "name": "multi-agent-movie-picker",
   "version": "0.1.0",
+  "description": "A production-ready Next.js app and comprehensive learning resource for building multi-agent AI systems using the OpenAI Agents SDK. Features intelligent movie/show recommendations through specialized agent orchestration.",
   "private": true,
   "scripts": {
     "dev": "next dev",
