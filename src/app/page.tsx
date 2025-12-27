@@ -6,7 +6,12 @@ import MovieCard from "@/components/MovieCard";
 import ApiKeyModal from "@/components/ApiKeyModal";
 import ResponseMetadata from "@/components/ResponseMetadata";
 import { useApiKey } from "@/contexts/ApiKeyContext";
-import { CornerDownLeft, Loader, Key as KeyIcon, ChevronDown } from "lucide-react";
+import {
+  CornerDownLeft,
+  Loader,
+  Key as KeyIcon,
+  ChevronDown,
+} from "lucide-react";
 
 export default function Home() {
   const [message, setMessage] = useState("");
@@ -64,12 +69,17 @@ export default function Home() {
       // Check content type to safely handle non-JSON errors (e.g. 404 HTML pages)
       const contentType = res.headers.get("content-type");
       let data;
-      
+
       if (contentType && contentType.includes("application/json")) {
         data = await res.json();
       } else {
         const text = await res.text();
-        throw new Error(`Server returned ${res.status} ${res.statusText}: ${text.substring(0, 100)}...`);
+        throw new Error(
+          `Server returned ${res.status} ${res.statusText}: ${text.substring(
+            0,
+            100
+          )}...`
+        );
       }
 
       if (!res.ok) {
@@ -131,6 +141,9 @@ export default function Home() {
 
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-8">
+            <div className="flex justify-center mb-4">
+              <img src="/logo.svg" alt="Logo" className="w-16 h-16" />
+            </div>
             <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-2">
               Movie & Show Picker
             </h1>
@@ -227,9 +240,11 @@ export default function Home() {
                     Recommendations
                   </h2>
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    {response.items.slice(0, visibleCount).map((item: RecommendItem, index: number) => (
-                      <MovieCard key={index} item={item} index={index} />
-                    ))}
+                    {response.items
+                      .slice(0, visibleCount)
+                      .map((item: RecommendItem, index: number) => (
+                        <MovieCard key={index} item={item} index={index} />
+                      ))}
                   </div>
 
                   {/* Load More Button */}
