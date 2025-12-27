@@ -122,6 +122,7 @@ export const RANKER_AGENT_INSTRUCTIONS = `You are a ranker agent. Rank filtered 
 **Output Format (JSON):**
 {
   "recommendations": [{
+    "id": number,         // TMDB ID from the input catalog item
     "name": "Title",
     "type": "movie|show",
     "durationMinutes": number,
