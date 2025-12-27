@@ -94,9 +94,14 @@ async function getTVDetails(id: number): Promise<CatalogItem | null> {
     const certification = usRating?.rating || "NR";
     
     // Average episode runtime
-    const avgRuntime = details.episode_run_time.length > 0
-      ? Math.round(details.episode_run_time.reduce((a, b) => a + b, 0) / details.episode_run_time.length)
-      : undefined;
+    let avgRuntime: number | undefined;
+    
+    if (details.episode_run_time && details.episode_run_time.length > 0) {
+      avgRuntime = Math.round(details.episode_run_time.reduce((a, b) => a + b, 0) / details.episode_run_time.length);
+    } else if (details.last_episode_to_air && details.last_episode_to_air.runtime) {
+      // Fallback to the runtime of the last aired episode
+      avgRuntime = details.last_episode_to_air.runtime;
+    }
 
     return {
       name: details.name,
@@ -132,8 +137,8 @@ export async function searchTMDBCatalog(query: PreferenceQuery): Promise<Catalog
 
       const response = await fetchFromTMDB<TMDBDiscoverResponse<TMDBMovieResult>>("/discover/movie", params);
       
-      // Fetch details for top 5 to avoid rate limits/latency but give rich data
-      const topResults = response.results.slice(0, 5);
+      // Fetch details for top 20 to avoid rate limits/latency but give rich data
+      const topResults = response.results.slice(0, 20);
       const detailPromises = topResults.map(async (item) => {
           const detail = await getMovieDetails(item.id);
           if (detail) results.push(detail);
@@ -158,8 +163,8 @@ export async function searchTMDBCatalog(query: PreferenceQuery): Promise<Catalog
 
       const response = await fetchFromTMDB<TMDBDiscoverResponse<TMDBTVResult>>("/discover/tv", params);
       
-      // Fetch details for top 5
-      const topResults = response.results.slice(0, 5);
+      // Fetch details for top 20
+      const topResults = response.results.slice(0, 20);
       const detailPromises = topResults.map(async (item) => {
           const detail = await getTVDetails(item.id);
           if (detail) results.push(detail);

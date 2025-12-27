@@ -60,4 +60,7 @@ export interface TMDBTVDetails {
       rating: string;
     }[];
   };
+  last_episode_to_air?: {
+    runtime?: number;
+  };
 }
