@@ -5,6 +5,7 @@ export interface RecommendRequest {
 }
 
 export interface RecommendItem {
+  id?: number; // TMDB ID
   name: string;
   type: "movie" | "show";
   durationMinutes?: number; // for movies (runtimeMinutes)

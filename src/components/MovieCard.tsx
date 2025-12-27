@@ -7,11 +7,19 @@ interface MovieCardProps {
 
 export default function MovieCard({ item, index }: MovieCardProps) {
   const isMovie = item.type === "movie";
+  const tmdbUrl = item.id 
+    ? `https://www.themoviedb.org/${isMovie ? 'movie' : 'tv'}/${item.id}`
+    : `https://www.google.com/search?q=${encodeURIComponent(item.name + " " + item.type)}`;
 
   return (
-    <div className="bg-white dark:bg-[#2D2D2D] rounded-xl border border-gray-200 dark:border-[#3A3A3A] overflow-hidden hover:shadow-lg dark:hover:shadow-lg/20 transition-all hover:border-gray-300 dark:hover:border-[#4A4A4A]">
+    <a 
+      href={tmdbUrl} 
+      target="_blank" 
+      rel="noopener noreferrer" 
+      className="block bg-white dark:bg-[#2D2D2D] rounded-xl border border-gray-200 dark:border-[#3A3A3A] overflow-hidden hover:shadow-lg dark:hover:shadow-lg/20 transition-all hover:border-gray-300 dark:hover:border-[#4A4A4A] group"
+    >
       {/* Header */}
-      <div className="bg-gradient-to-r from-gray-100 to-gray-50 dark:from-[#3A3A3A] dark:to-[#2D2D2D] px-6 py-4 border-b border-gray-200 dark:border-[#3A3A3A]">
+      <div className="bg-gradient-to-r from-gray-100 to-gray-50 dark:from-[#3A3A3A] dark:to-[#2D2D2D] px-6 py-4 border-b border-gray-200 dark:border-[#3A3A3A] group-hover:from-gray-200 dark:group-hover:from-[#404040] transition-colors">
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-3 mb-2">
@@ -72,8 +80,11 @@ export default function MovieCard({ item, index }: MovieCardProps) {
           <div className="text-xs text-gray-500 dark:text-gray-400">
             Recommendation #{index + 1}
           </div>
+          <div className="text-indigo-600 dark:text-indigo-400 text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
+            View on TMDB &rarr;
+          </div>
         </div>
       </div>
-    </div>
+    </a>
   );
 }

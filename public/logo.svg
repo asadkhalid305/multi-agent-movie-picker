@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <!-- Circuit Traces (representing AI) - Connected to a central invisible node -->
+  <path d="M100 20 V 60" stroke="#4F46E5" stroke-width="8" stroke-linecap="round"/>
+  <path d="M100 140 V 180" stroke="#4F46E5" stroke-width="8" stroke-linecap="round"/>
+  <path d="M20 100 H 60" stroke="#4F46E5" stroke-width="8" stroke-linecap="round"/>
+  <path d="M140 100 H 180" stroke="#4F46E5" stroke-width="8" stroke-linecap="round"/>
+  
+  <!-- Central Ring/Chip Body -->
+  <circle cx="100" cy="100" r="60" stroke="#4F46E5" stroke-width="6" fill="none" opacity="0.9"/>
+
+  <!-- Play Button Triangle -->
+  <path d="M85 70 L130 100 L85 130 V70 Z" fill="url(#gradient)" stroke="none"/>
+  
+  <!-- Gradient Definition -->
+  <defs>
+    <linearGradient id="gradient" x1="85" y1="70" x2="130" y2="130" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6366F1" /> <!-- Indigo 500 -->
+      <stop offset="1" stop-color="#A855F7" /> <!-- Purple 500 -->
+    </linearGradient>
+  </defs>
+</svg>

@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import type { RecommendResponse, RecommendItem } from "@/types/api";
 import MovieCard from "@/components/MovieCard";
 import ApiKeyModal from "@/components/ApiKeyModal";
 import ResponseMetadata from "@/components/ResponseMetadata";
 import { useApiKey } from "@/contexts/ApiKeyContext";
-import { CornerDownLeft, Loader, Key as KeyIcon, ChevronDown } from "lucide-react";
+import { CornerDownLeft, Loader, Key as KeyIcon, ChevronDown, X } from "lucide-react";
 
 export default function Home() {
   const [message, setMessage] = useState("");
@@ -15,6 +15,7 @@ export default function Home() {
   const [response, setResponse] = useState<RecommendResponse | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [visibleCount, setVisibleCount] = useState(6);
+  const resultsRef = useRef<HTMLDivElement>(null);
 
   const { apiKey, setApiKey, hasApiKey, clearApiKey } = useApiKey();
 
@@ -24,6 +25,16 @@ export default function Home() {
       setShowModal(true);
     }
   }, [hasApiKey]);
+
+  // Scroll to results when response arrives
+  useEffect(() => {
+    if (response && resultsRef.current) {
+      // Small timeout to allow render
+      setTimeout(() => {
+        resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 100);
+    }
+  }, [response]);
 
   const handleModalSubmit = (key: string) => {
     setApiKey(key);
@@ -85,7 +96,6 @@ export default function Home() {
       }
 
       setResponse(data);
-      setMessage("");
     } catch (err: any) {
       console.error("API Request Failed:", err);
       setError(err.message || "Failed to get recommendations");
@@ -101,6 +111,11 @@ export default function Home() {
         handleSubmit(e as any);
       }
     }
+  };
+
+  const handleClear = () => {
+    setMessage("");
+    // We don't clear response immediately so user can see what they had
   };
 
   const handleChangeApiKey = () => {
@@ -131,6 +146,9 @@ export default function Home() {
 
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-8">
+            <div className="flex justify-center mb-4">
+              <img src="/logo.svg" alt="Logo" className="w-16 h-16" />
+            </div>
             <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-2">
               Movie & Show Picker
             </h1>
@@ -157,16 +175,28 @@ export default function Home() {
               >
                 What are you in the mood for?
               </label>
-              <textarea
-                id="message"
-                rows={4}
-                className="w-full px-4 py-3 bg-gray-50 dark:bg-[#1A1A1A] border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800 dark:focus:ring-white focus:border-gray-800 dark:focus:border-white text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 transition-colors"
-                placeholder="E.g., I have a 1 hour flight, want something light and funny... (Press Enter to submit)"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                onKeyDown={handleKeyDown}
-                disabled={loading}
-              />
+              <div className="relative">
+                <textarea
+                  id="message"
+                  rows={4}
+                  className="w-full px-4 py-3 bg-gray-50 dark:bg-[#1A1A1A] border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800 dark:focus:ring-white focus:border-gray-800 dark:focus:border-white text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 transition-colors pr-10"
+                  placeholder="E.g., I have a 1 hour flight, want something light and funny... (Press Enter to submit)"
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  disabled={loading}
+                />
+                {message && (
+                  <button
+                    type="button"
+                    onClick={handleClear}
+                    className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors p-1"
+                    title="Clear input"
+                  >
+                    <X size={16} />
+                  </button>
+                )}
+              </div>
               <button
                 type="submit"
                 disabled={loading || !message.trim()}
@@ -194,7 +224,7 @@ export default function Home() {
           )}
 
           {response && (
-            <div className="space-y-6">
+            <div ref={resultsRef} className="space-y-6 scroll-mt-24">
               {/* User Query Card */}
               <div className="bg-white dark:bg-[#2D2D2D] rounded-xl border border-gray-200 dark:border-[#3A3A3A] p-6 transition-colors shadow-sm">
                 <p className="text-gray-600 dark:text-gray-400">
