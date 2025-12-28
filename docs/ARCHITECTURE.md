@@ -363,8 +363,10 @@ Request → [Input Guardrail] → Agent System → [Output Guardrail] → Respon
 | ----------------- | ------------------------------------ |
 | `page.tsx`        | Main UI, user input, display results |
 | `MovieCard.tsx`   | Render individual recommendations    |
+| `Header.tsx`      | App header with branding and actions |
+| `BuyMeACoffee.tsx`| Support integration component        |
 | `layout.tsx`      | App shell, metadata, global styles   |
-| `ThemeScript.tsx` | Dark/light theme management          |
+| `ThemeToggle.tsx` | Dark/light theme management          |
 | `globals.css`     | Global styles (Tailwind)             |
 
 ### API Layer (`src/app/api/recommend/`)
@@ -497,7 +499,7 @@ Different error types return different status codes (400 vs 500).
 
 ### Future Enhancements
 
-- **Database integration** - Replace catalog.json with PostgreSQL/MongoDB
+- **Database integration** - Replace TMDB API with a dedicated PostgreSQL/MongoDB if custom metadata is needed
 - **Caching layer** - Redis for frequent queries
 - **Async processing** - Queue system for high load
 - **Rate limiting** - Protect against abuse

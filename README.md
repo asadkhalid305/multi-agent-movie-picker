@@ -182,11 +182,10 @@ src/
       tools/                    # Catalog search tool
       guardrails/               # Input/output validation
       instructions.ts           # Agent instructions
-      util/helpers.ts           # Helper functions (search logic)
   components/
     MovieCard.tsx               # UI component for recommendations
-  data/
-    catalog.json                # Movie and show database
+  services/
+    tmdb.ts                     # TMDB API integration service
   types/
     agent.ts                    # Agent-related types
     api.ts                      # API types
