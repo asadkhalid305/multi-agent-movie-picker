@@ -38,9 +38,9 @@ This application is optimized for Vercel deployment with full Next.js support.
 
    If deploying this app under a subdirectory path via rewrites from another domain:
 
-   - Add environment variable: `NEXT_PUBLIC_BASE_PATH` = `/apps/movie-and-series-picker`
+   - Add environment variable: `NEXT_PUBLIC_BASE_PATH` = `/apps/streamwise-ai`
    - This ensures all assets and routes work correctly when served from a subpath
-   - Example: Serving at `yourdomain.com/apps/movie-and-series-picker` instead of root
+   - Example: Serving at `yourdomain.com/apps/streamwise-ai` instead of root
    - Not needed for standard standalone deployments
 
 4. **Deploy**
@@ -54,14 +54,14 @@ This application is optimized for Vercel deployment with full Next.js support.
 | ----------------------- | -------- | ------------- | ----------------------------------------------------------------------------- |
 | `OPENAI_API_KEY`        | No\*     | -             | Your OpenAI API key                                                           |
 | `OPENAI_DEFAULT_MODEL`  | No       | `gpt-4.1-mini` | OpenAI model to use                                                           |
-| `NEXT_PUBLIC_BASE_PATH` | No       | -             | Base path for subdirectory deployment (e.g., `/apps/movie-and-series-picker`) |
+| `NEXT_PUBLIC_BASE_PATH` | No       | -             | Base path for subdirectory deployment (e.g., `/apps/streamwise-ai`) |
 
 \* Required only if you want to provide a shared key. Otherwise, users provide their own.
 
 **About `NEXT_PUBLIC_BASE_PATH`:**
 
 - Only needed for advanced deployment scenarios where the app is served from a subdirectory
-- Example: If your portfolio site at `yourdomain.com` rewrites `/apps/movie-and-series-picker` to this app
+- Example: If your portfolio site at `yourdomain.com` rewrites `/apps/streamwise-ai` to this app
 - Ensures all JavaScript, CSS, and route links are correctly prefixed
 - Leave unset for standard root-level deployments (most users)
 

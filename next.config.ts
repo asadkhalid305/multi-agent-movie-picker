@@ -14,17 +14,17 @@ const nextConfig = {
    * - Perfect for workshops, tutorials, and learning multi-agent systems
    *
    * Production Deployment (Environment-Based):
-   * - Set NEXT_PUBLIC_BASE_PATH=/apps/movie-and-series-picker in Vercel
+   * - Set NEXT_PUBLIC_BASE_PATH=/apps/streamwise-ai in Vercel
    * - Primary domain: https://www.asadullahkhalid.com
-   * - App accessible at: https://www.asadullahkhalid.com/apps/movie-and-series-picker
+   * - App accessible at: https://www.asadullahkhalid.com/apps/streamwise-ai
    *
    * How Production Setup Works:
-   * - Portfolio site rewrites /apps/movie-and-series-picker → multi-agent-movie-picker.vercel.app
+   * - Portfolio site rewrites /apps/streamwise-ai → multi-agent-movie-picker.vercel.app
    * - Environment variable triggers basePath, ensuring all assets (JS, CSS) are correctly prefixed
    * - No impact on learners cloning the repo
    *
    * To Deploy with basePath:
-   * - Add environment variable in your deployment platform: NEXT_PUBLIC_BASE_PATH=/apps/movie-and-series-picker
+   * - Add environment variable in your deployment platform: NEXT_PUBLIC_BASE_PATH=/apps/streamwise-ai
    *
    * @see https://nextjs.org/docs/app/api-reference/next-config-js/basePath
    */
