@@ -4,12 +4,11 @@ import { useState, useEffect, useRef } from "react";
 import type { RecommendResponse, RecommendItem } from "@/types/api";
 import MovieCard from "@/components/MovieCard";
 import ApiKeyModal from "@/components/ApiKeyModal";
-import ResponseMetadata from "@/components/ResponseMetadata";
+import Header from "@/components/Header";
 import { useApiKey } from "@/contexts/ApiKeyContext";
 import {
   CornerDownLeft,
   Loader,
-  Key as KeyIcon,
   ChevronDown,
   X,
 } from "lucide-react";
@@ -23,7 +22,7 @@ export default function Home() {
   const [visibleCount, setVisibleCount] = useState(6);
   const resultsRef = useRef<HTMLDivElement>(null);
 
-  const { apiKey, setApiKey, hasApiKey, clearApiKey } = useApiKey();
+  const { apiKey, setApiKey, hasApiKey } = useApiKey();
 
   // Check if API key is needed (not in session storage)
   useEffect(() => {
@@ -132,24 +131,19 @@ export default function Home() {
     // We don't clear response immediately so user can see what they had
   };
 
-  const handleChangeApiKey = () => {
-    setShowModal(true);
-  };
-
   const handleLoadMore = () => {
     setVisibleCount((prev) => prev + 6);
   };
 
   return (
     <div className="min-h-screen bg-white dark:bg-[#202020] transition-colors flex flex-col">
-      {/* Sticky Metadata Header */}
-      {response && (
-        <div className="sticky top-0 z-10 shadow-sm">
-          <ResponseMetadata metadata={response.metadata} />
-        </div>
-      )}
+      <Header 
+        metadata={response?.metadata} 
+        onApiKeyClick={() => setShowModal(true)}
+        hasApiKey={hasApiKey}
+      />
 
-      <main className="flex-grow py-12 px-4 sm:px-6 lg:px-8">
+      <main className="flex-grow pt-24 pb-12 px-4 sm:px-6 lg:px-8">
         <ApiKeyModal
           isOpen={showModal}
           canClose={hasApiKey}
@@ -160,9 +154,6 @@ export default function Home() {
 
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-8">
-            <div className="flex justify-center mb-4">
-              <img src="/logo.svg" alt="Logo" className="w-16 h-16" />
-            </div>
             <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-2">
               StreamWise AI
             </h1>
@@ -170,15 +161,6 @@ export default function Home() {
               Tell us what you&apos;re looking for, and we&apos;ll recommend
               something great.
             </p>
-            {hasApiKey && (
-              <button
-                onClick={handleChangeApiKey}
-                className="mt-3 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors inline-flex items-center gap-1"
-              >
-                <KeyIcon size={14} />
-                Change API Key
-              </button>
-            )}
           </div>
 
           <form onSubmit={handleSubmit} className="mb-8">

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import ThemeToggle from "./ThemeScript";
 import { ApiKeyProvider } from "@/contexts/ApiKeyContext";
 
 export const metadata: Metadata = {
@@ -35,7 +34,6 @@ export default function RootLayout({
         />
       </head>
       <body className="bg-white dark:bg-[#202020] transition-all duration-300 ease-in-out">
-        <ThemeToggle />
         <ApiKeyProvider>{children}</ApiKeyProvider>
       </body>
     </html>
