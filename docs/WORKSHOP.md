@@ -764,7 +764,7 @@ Expected: All tests pass ✓
 - [ ] Verify Zod schema parameter names match what you're passing
 - [ ] Check that searchCatalog() is being imported from `src/lib/agents-sdk/util/helpers.ts`
 - [ ] Verify searchCatalog() is being called with the correct parameters
-- [ ] Confirm genres/types match the catalog.json data
+- [ ] Confirm genres/types match the TMDB API data
 - [ ] Review tool execute function logic
 
 ### "Ranker output is invalid (guardrail error)"
@@ -831,7 +831,7 @@ This foundation enables you to build:
 - **Instructions**: `src/lib/agents-sdk/instructions.ts` - Study the detailed instructions for each agent
 - **Guardrails**: `src/lib/agents-sdk/guardrails/` - Review how validation works
 - **Types**: `src/types/agent.ts` and `src/types/api.ts` - Understand data structures
-- **Catalog**: `src/data/catalog.json` - See what data is available
+- **TMDB Service**: `src/services/tmdb.ts` - Review TMDB API integration
 - **Tests**: `tests/api-recommend.test.ts` - Automated tests for all 3 intents and error handling
 - **Pitch**: `docs/PITCH.md` - Remember why this matters to users
 
