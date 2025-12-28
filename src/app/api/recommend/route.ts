@@ -36,48 +36,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    let response: RecommendResponse;
+    // TODO: Implement the agent execution flow here
+    // 1. Call executeMultiAgentSystem(message, apiKey)
+    // 2. Format the response using formatResponse(result)
+    // 3. Return the response as JSON
 
-    try {
-      // Execute the multi-agent system with the user message and API key
-      const result = await executeMultiAgentSystem(message, apiKey);
+    // Placeholder response for now
+    return NextResponse.json({ 
+      message: "Agent system not implemented yet. Check src/app/api/recommend/route.ts" 
+    });
 
-      // Format the response
-      response = formatResponse(result);
-    } catch (error) {
-      // Handle input guardrail errors
-      if (error instanceof InputGuardrailTripwireTriggered) {
-        console.log("Input guardrail triggered:", error.name);
-        return NextResponse.json(
-          {
-            error:
-              "Your request could not be processed due to content policy violations.",
-            details: error.message,
-          },
-          { status: 400 }
-        );
-      }
-      // Handle output guardrail errors
-      if (error instanceof OutputGuardrailTripwireTriggered) {
-        console.log("Output guardrail triggered:", error.name);
-        return NextResponse.json(
-          {
-            error:
-              "The response could not be generated due to validation issues.",
-            details: error.message,
-          },
-          { status: 500 }
-        );
-      }
-
-      console.error("Error executing multi-agent system:", error);
-      return NextResponse.json(
-        { error: "Internal server error" },
-        { status: 500 }
-      );
-    }
-
-    return NextResponse.json(response);
   } catch (error) {
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   }
