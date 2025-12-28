@@ -21,14 +21,14 @@ export default function ThemeToggle() {
 
   if (!mounted) {
     return (
-      <div className="fixed top-4 right-4 p-2 rounded-lg bg-gray-200 dark:bg-gray-700 w-10 h-10" />
+      <div className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 w-9 h-9" />
     );
   }
 
   return (
     <button
       onClick={toggleTheme}
-      className="fixed top-4 right-4 z-50 p-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+      className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
       aria-label="Toggle theme"
     >
       {theme === "dark" ? (
