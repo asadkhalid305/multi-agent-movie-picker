@@ -15,12 +15,14 @@ export default function Header({
   onApiKeyClick,
   hasApiKey,
 }: HeaderProps) {
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-gray-200 dark:border-[#3A3A3A] bg-white/80 dark:bg-[#202020]/80 backdrop-blur-md transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4 relative">
         {/* Left: Brand */}
         <div className="flex items-center gap-3 shrink-0">
-          <img src="/logo.svg" alt="Logo" className="w-8 h-8" />
+          <img src={`${basePath}/logo.svg`} alt="Logo" className="w-8 h-8" />
           <span className="font-bold text-lg text-gray-900 dark:text-gray-100 hidden xs:block">
             StreamWise AI
           </span>
